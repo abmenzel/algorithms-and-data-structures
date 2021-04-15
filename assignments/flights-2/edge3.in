@@ -1,0 +1,7 @@
+2 4
+11:00:00 Eee
+11:00:01 Seattle
+destination 11:00:01
+delay 11:00:01 1
+destination 11:00:02
+destination 11:00:01

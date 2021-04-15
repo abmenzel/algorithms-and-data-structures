@@ -2,5 +2,8 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "c:\\Users\\Alexander\\libraries\\algs4.jar"
+    ],
+    "java.project.sourcePaths": [
+        ""
     ]
 }

@@ -1,10 +1,13 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
 
 public class Flights {
 
@@ -57,52 +60,35 @@ public class Flights {
 
     public String nextFlight(String timestamp) {
         Entry<String, String> ceilEntry = flightTable.ceilingEntry(timestamp);
-        if(ceilEntry != null){
-            return ceilEntry.getKey() + " " + ceilEntry.getValue(); 
-        }else{
-            return "";
-        }
+        return ceilEntry.getKey() + " " + ceilEntry.getValue();
     }
 
     public int flightCount(String timestamp1, String timestamp2) {
-        String loKey = flightTable.ceilingKey(timestamp1);
-        String hiKey = flightTable.floorKey(timestamp2);
-        if (loKey != null && hiKey != null) {
-            int lo = flightTable.headMap(loKey).size();
-            int hi = flightTable.headMap(hiKey).size();
-            return (hi - lo) + 1;
-        } else {
-            return 0;
-        }
+        return flightTable.subMap(timestamp1, true, timestamp2, true).size();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Flights myFlights123 = new Flights();
-
-        int n = StdIn.readInt();
-        int m = StdIn.readInt();
-        String[] operations = new String[m];
-
-        StdIn.readLine();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String[] firstLine = reader.readLine().split(" ");
+        int n = Integer.parseInt(firstLine[0]);
+        int m = Integer.parseInt(firstLine[1]);
 
         for (int i = 0; i < n; i++) {
-            String[] line = StdIn.readLine().split(" ");
+            String[] line = reader.readLine().split(" ");
             String time = line[0];
             String location = line[1];
             myFlights123.addFlight(time, location);
         }
 
         for (int i = 0; i < m; i++) {
-            operations[i] = StdIn.readLine();
-        }
-
-        for (String op : operations) {
-            String opParts[] = op.split(" ");
+            String line = reader.readLine();
+            String opParts[] = line.split(" ");
 
             switch (opParts[0]) {
             case "destination": {
                 String timestamp = opParts[1];
-                System.out.println(myFlights123.getFlightLocation(timestamp));
+                StdOut.println(myFlights123.getFlightLocation(timestamp));
             }
                 break;
             case "cancel": {
@@ -124,16 +110,18 @@ public class Flights {
                 break;
             case "next": {
                 String timestamp = opParts[1];
-                System.out.println(myFlights123.nextFlight(timestamp));
+                StdOut.println(myFlights123.nextFlight(timestamp));
             }
                 break;
             case "count": {
                 String timestamp1 = opParts[1];
                 String timestamp2 = opParts[2];
-                System.out.println(myFlights123.flightCount(timestamp1, timestamp2));
+                StdOut.println(myFlights123.flightCount(timestamp1, timestamp2));
             }
                 break;
             }
         }
+
+        reader.close();
     }
 }
